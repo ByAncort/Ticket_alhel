@@ -46,6 +46,5 @@ public class UnifierServiceImpl implements UnifierService {
     }
     private String guardarTicket(){
         String token = obtenerToken();
-
     }
 }
