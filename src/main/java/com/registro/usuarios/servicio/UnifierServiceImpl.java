@@ -2,12 +2,17 @@ package com.registro.usuarios.servicio;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.registro.usuarios.modelo.response.TokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 @Service
 public class UnifierServiceImpl implements UnifierService {
@@ -17,6 +22,7 @@ public class UnifierServiceImpl implements UnifierService {
 
     @Value("${baseUrl}")
     private String baseUrl;
+
     @Override
     public String obtenerToken() {
         String tokenUrl = baseUrl + "/ws/rest/service/v1/login";
@@ -33,7 +39,6 @@ public class UnifierServiceImpl implements UnifierService {
 
         if (response.getStatusCode().is2xxSuccessful()) {
             try {
-                // Parsear directamente el token del cuerpo de la respuesta JSON
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode rootNode = objectMapper.readTree(response.getBody());
                 return rootNode.path("token").asText();
@@ -44,7 +49,71 @@ public class UnifierServiceImpl implements UnifierService {
             throw new RuntimeException("Failed to obtain token: " + response.getStatusCode());
         }
     }
-    private String guardarTicket(){
-        String token = obtenerToken();
+    public String guardarTicket() {
+        try {
+            String UrlTicekt = baseUrl + "/ws/rest/service/v1/bp/record/MT-00013";
+            URL url = new URL(UrlTicekt);
+
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            // Configurar la conexión
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json");
+            String token = obtenerToken();
+            con.setRequestProperty("Authorization", "Bearer " + token);
+
+            // Habilitar la escritura de datos en la conexión
+            con.setDoOutput(true);
+
+            // Construir el cuerpo JSON
+            String jsonBody = "{\n" +
+                    "    \"options\": {\n" +
+                    "        \"bpname\": \"Incidencias Arrendatarios\"\n" +
+                    "    },\n" +
+                    "    \"data\": [\n" +
+                    "        {\n" +
+                    "            \"OT_TITULO_TB250\": \"test\",\n" +
+                    "            \"OT_PRIORIDAD_SPD\": \"Alta\",\n" +
+                    "            \"OT_CATEGORIA_SPD\": \"Reparaciones\",\n" +
+                    "            \"TIC_DESCRIPCION_TB2000\": \"test4\",\n" +
+                    "            \"TIC_USERPORTAL_TB120\": \"Metacontrol User\",\n" +
+                    "            \"TIC_EMPRESAUSERPORTAL_TB120\": \"\"\n" +
+                    "        }\n" +
+                    "    ]\n" +
+                    "}";
+
+            // Enviar el cuerpo JSON a la conexión
+            try (DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
+                wr.writeBytes(jsonBody);
+                wr.flush();
+            }
+
+            // Obtener el código de respuesta HTTP
+            int responseCode = con.getResponseCode();
+            System.out.println("Response Code : " + responseCode);
+
+            // Leer la respuesta del servidor
+            StringBuilder response = new StringBuilder();
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+            }
+
+            // Imprimir la respuesta del servidor
+            System.out.println(response.toString());
+
+            // Procesar la respuesta según sea necesario
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                return "Ticket guardado exitosamente";
+            } else {
+                throw new RuntimeException("Failed to save ticket: " + responseCode);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al guardar el ticket: " + e.getMessage(), e);
+        }
     }
+
 }

@@ -41,27 +41,35 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		auth.authenticationProvider(authenticationProvider());
 	}
 
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers(
-				"/registro**",
-				"/js/**",
-				"/css/**",
-				"/img/**",
-				"/api/**").permitAll()
-		.anyRequest().authenticated()
-		.and()
-		.formLogin()
-		.loginPage("/login")
-		.permitAll()
-		.and()
-		.logout()
-		.invalidateHttpSession(true)
-		.clearAuthentication(true)
-		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-		.logoutSuccessUrl("/login?logout")
-		.permitAll();
+		http
+				.csrf().disable() // Deshabilitar CSRF temporalmente
+				.authorizeRequests()
+				.antMatchers(
+						"/registro**",
+						"/js/**",
+						"/css/**",
+						"/img/**",
+						"/api/**",
+						"/api/tickets/guardar"
+				).permitAll()
+				.anyRequest().authenticated()
+				.and()
+				.formLogin()
+				.loginPage("/login")
+				.permitAll()
+				.and()
+				.logout()
+				.invalidateHttpSession(true)
+				.clearAuthentication(true)
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.logoutSuccessUrl("/login?logout")
+				.permitAll();
 	}
+
+
 }
 
 
