@@ -264,17 +264,28 @@
 								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 									<thead>
 									<tr>
-										<th>expiryDate</th>
-										<th>Timezone</th>
-										<th>expiryTime</th>
-										<th>status</th>
-										<th>token</th>
+										<th>Record No</th>
+										<th>Title</th>
+										<th>Priority</th>
+										<th>Category</th>
+										<th>Description</th>
+										<th>User Portal</th>
+										<th>Company User Portal</th>
 
 									</tr>
 									</thead>
 
 								<tbody>
+								<tr th:each="ticket : ${informacion}">
 
+									<td th:text="${ticket.record_no}"></td>
+									<td th:text="${ticket.OT_TITULO_TB250}"></td>
+									<td th:text="${ticket.OT_PRIORIDAD_SPD}"></td>
+									<td th:text="${ticket.OT_CATEGORIA_SPD}"></td>
+									<td th:text="${ticket.TIC_DESCRIPCION_TB2000}"></td>
+									<td th:text="${ticket.TIC_USERPORTAL_TB120}"></td>
+									<td th:text="${ticket.TIC_EMPRESAUSERPORTAL_TB120}"></td>
+								</tr>
 								</tbody>
 								</table>
 							</div>

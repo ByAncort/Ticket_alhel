@@ -1,5 +1,6 @@
 package com.registro.usuarios.controlador;
 
+import com.registro.usuarios.modelo.Data;
 import com.registro.usuarios.servicio.UnifierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,9 @@ public class TicketController {
 
         return resultado;
     }
-
+    @PostMapping("/consultar")
+    public String consultarTicket(@RequestBody Data data) {
+        return unifierService.consultarInformacion(data.getBpname());
+    }
 
 }
