@@ -49,7 +49,14 @@ public class UnifierServiceImpl implements UnifierService {
             throw new RuntimeException("Failed to obtain token: " + response.getStatusCode());
         }
     }
-    public String guardarTicket() {
+    public String guardarTicket(
+            String OT_TITULO_TB250,
+            String OT_PRIORIDAD_SPD,
+            String OT_CATEGORIA_SPD,
+            String TIC_DESCRIPCION_TB2000,
+            String TIC_USERPORTAL_TB120,
+            String TIC_EMPRESAUSERPORTAL_TB120
+    ){
         try {
             String UrlTicekt = baseUrl + "/ws/rest/service/v1/bp/record/MT-00013";
             URL url = new URL(UrlTicekt);
@@ -72,12 +79,12 @@ public class UnifierServiceImpl implements UnifierService {
                     "    },\n" +
                     "    \"data\": [\n" +
                     "        {\n" +
-                    "            \"OT_TITULO_TB250\": \"test\",\n" +
-                    "            \"OT_PRIORIDAD_SPD\": \"Alta\",\n" +
-                    "            \"OT_CATEGORIA_SPD\": \"Reparaciones\",\n" +
-                    "            \"TIC_DESCRIPCION_TB2000\": \"test4\",\n" +
-                    "            \"TIC_USERPORTAL_TB120\": \"Metacontrol User\",\n" +
-                    "            \"TIC_EMPRESAUSERPORTAL_TB120\": \"\"\n" +
+                    "            \"OT_TITULO_TB250\": \"" + OT_TITULO_TB250 + "\",\n" +
+                    "            \"OT_PRIORIDAD_SPD\": \""+OT_PRIORIDAD_SPD+"\",\n" +
+                    "            \"OT_CATEGORIA_SPD\": \""+OT_CATEGORIA_SPD+"\",\n" +
+                    "            \"TIC_DESCRIPCION_TB2000\": \""+TIC_DESCRIPCION_TB2000+"\",\n" +
+                    "            \"TIC_USERPORTAL_TB120\": \""+TIC_USERPORTAL_TB120+"\",\n" +
+                    "            \"TIC_EMPRESAUSERPORTAL_TB120\": \""+TIC_EMPRESAUSERPORTAL_TB120+"\"\n" +
                     "        }\n" +
                     "    ]\n" +
                     "}";

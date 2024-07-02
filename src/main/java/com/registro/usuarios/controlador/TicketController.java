@@ -2,28 +2,34 @@ package com.registro.usuarios.controlador;
 
 import com.registro.usuarios.servicio.UnifierService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/tickets")
 public class TicketController {
 
+    private final UnifierService unifierService;
+
     @Autowired
-    private UnifierService unifierService;
+    public TicketController(UnifierService unifierService) {
+        this.unifierService = unifierService;
+    }
 
     @PostMapping("/guardar")
+    public String guardarTicket(@RequestBody TicketRequest ticketRequest) {
+        String resultado = unifierService.guardarTicket(
+                ticketRequest.getOT_TITULO_TB250(),
+                ticketRequest.getOT_PRIORIDAD_SPD(),
+                ticketRequest.getOT_CATEGORIA_SPD(),
+                ticketRequest.getTIC_DESCRIPCION_TB2000(),
+                ticketRequest.getTIC_USERPORTAL_TB120(),
+                ticketRequest.getTIC_EMPRESAUSERPORTAL_TB120()
+        );
 
-    public ResponseEntity<String> guardarTicket() {
-        try {
-            String resultado = unifierService.guardarTicket();
-            return ResponseEntity.ok(resultado);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error al guardar el ticket: " + e.getMessage());
-        }
+        return resultado;
     }
+
 
 }

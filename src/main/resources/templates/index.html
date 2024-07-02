@@ -402,18 +402,39 @@
 
 <script>
 	$(document).ready(function() {
-		$('#submitForm').click(function() {
-			var formData = {
-				titulo: $('#input1').val(),
-				prioridad: $('#select1').val(),
-				categoria: $('#select2').val(),
-				descripcion: $('#input2').val(),
-				tokenValue: '${token.token}'
+		$('#submitForm').click(function(event) {
+			event.preventDefault();
+
+			var jsonBody = {
+				OT_TITULO_TB250: $('#input1').val(),
+				OT_PRIORIDAD_SPD: $('#select1').val(),
+				OT_CATEGORIA_SPD: $('#select2').val(),
+				TIC_DESCRIPCION_TB2000: $('#input2').val(),
+				TIC_USERPORTAL_TB120: "Metacontrol User",
+				TIC_EMPRESAUSERPORTAL_TB120: ""
 			};
-			console.log(formData,)
+
+			var jsonData = JSON.stringify(jsonBody);
+			var apiUrl = '/api/tickets/guardar';
+
+			$.ajax({
+				url: apiUrl,
+				type: 'POST',
+				contentType: 'application/json',
+				data: jsonData,
+				success: function(response) {
+					//alert('Ticket guardado exitosamente');
+					window.location.href = '/';
+				},
+				error: function(xhr, status, error) {
+					console.error('Error al guardar el ticket:', error);
+				}
+			});
 		});
 	});
 </script>
+
+
 
 </body>
 

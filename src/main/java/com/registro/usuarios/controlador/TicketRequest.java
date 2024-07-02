@@ -1,11 +1,19 @@
 package com.registro.usuarios.controlador;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class TicketRequest {
+    @JsonProperty("OT_TITULO_TB250")
     private String OT_TITULO_TB250;
+    @JsonProperty("OT_PRIORIDAD_SPD")
     private String OT_PRIORIDAD_SPD;
+    @JsonProperty("OT_CATEGORIA_SPD")
     private String OT_CATEGORIA_SPD;
+    @JsonProperty("TIC_DESCRIPCION_TB2000")
     private String TIC_DESCRIPCION_TB2000;
+    @JsonProperty("TIC_USERPORTAL_TB120")
     private String TIC_USERPORTAL_TB120;
+    @JsonProperty("TIC_EMPRESAUSERPORTAL_TB120")
     private String TIC_EMPRESAUSERPORTAL_TB120;
 
     // Getters y setters
