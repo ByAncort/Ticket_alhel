@@ -53,7 +53,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 						"/css/**",
 						"/img/**",
 						"/api/**",
-						"/api/tickets/guardar"
+						"/api/tickets/guardar",
+						"/all-User"
 				).permitAll()
 				.anyRequest().authenticated()
 				.and()

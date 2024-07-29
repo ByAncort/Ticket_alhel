@@ -1,0 +1,52 @@
+<div th:fragment="user">
+
+
+
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Tickets</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+          <tr>
+            <th>Record Number</th>
+            <th>User Portal</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Priority</th>
+
+          </tr>
+          </thead>
+          <tfoot>
+          <tr>
+            <th>Record Number</th>
+            <th>User Portal</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Priority</th>
+
+          </tr>
+          </tfoot>
+          <tbody>
+          <tr th:each="ticket : ${informacion}">
+            <td th:text="${ticket.uuu_user_loginname}"></td>
+            <td th:text="${ticket.uuu_user_name}"></td>
+            <td th:text="${ticket.uuu_user_firstname}"></td>
+            <td th:text="${ticket.uuu_user_firstname}"></td>
+            <td th:text="${ticket.uuu_user_firstname}"></td>
+
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+</div>

@@ -10,8 +10,11 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 
 @Service
@@ -176,4 +179,61 @@ public class UnifierServiceImpl implements UnifierService {
             throw new RuntimeException("Error consult Info: " + e.getMessage(), e);
         }
     }
-}
+
+    public String alluser() {
+        try {
+            String UrlTicekt = baseUrl + "/ws/rest/service/v1/admin/user/get";
+            URL url = new URL(UrlTicekt);
+
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            // Configurar la conexión
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json");
+            String token = obtenerToken();
+            con.setRequestProperty("Authorization", "Bearer " + token);
+
+            // Habilitar la escritura de datos en la conexión
+            con.setDoOutput(true);
+
+            // Construir el cuerpo JSON
+            String jsonBody = "{ \"filterCondition\": \"uuu_user_status=1\" }";
+
+            // Enviar el cuerpo JSON a la conexión
+            try (DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
+                wr.writeBytes(jsonBody);
+                wr.flush();
+            }
+
+            // Obtener el código de respuesta HTTP
+            int responseCode = con.getResponseCode();
+            System.out.println("Response Code : " + responseCode);
+
+            // Leer la respuesta del servidor
+            StringBuilder response = new StringBuilder();
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+            }
+
+            // Imprimir la respuesta del servidor
+            System.out.println(response.toString());
+
+            // Procesar la respuesta según sea necesario
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                return response.toString();
+            } else {
+                throw new RuntimeException("Failed to consult Info: " + responseCode);
+            }
+        } catch (ProtocolException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    }
